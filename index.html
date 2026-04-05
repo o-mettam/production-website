@@ -5,81 +5,191 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Owen Mettam - Professional Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        .gradient-text { color: #4f46e5; font-weight: 600; }
+        .gradient-text {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+        .dark .gradient-text {
+            background: linear-gradient(135deg, #818cf8, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
         .card-hover { transition: all 0.3s ease; }
-        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .fade-in { animation: fadeIn 0.6s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .skill-bar { transition: width 1s ease-in-out; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(79, 70, 229, 0.1); }
+        .dark .card-hover:hover { box-shadow: 0 20px 40px rgba(129, 140, 248, 0.08); }
+        /* Reveal animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        /* Hero */
+        .hero-gradient {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-gradient::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(129, 140, 248, 0.15) 0%, transparent 60%),
+                        radial-gradient(circle at 70% 80%, rgba(167, 139, 250, 0.1) 0%, transparent 50%);
+        }
+        .photo-ring {
+            padding: 5px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #818cf8, #a78bfa, #c084fc, #818cf8);
+            background-size: 300% 300%;
+            animation: ringShift 4s ease infinite;
+        }
+        @keyframes ringShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        /* Section heading accent */
+        .section-heading::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            border-radius: 2px;
+            margin: 12px auto 0;
+        }
+        /* Timeline */
+        .timeline { position: relative; padding-left: 40px; }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 7px;
+            top: 8px;
+            bottom: 8px;
+            width: 2px;
+            background: linear-gradient(to bottom, #4f46e5, #7c3aed, #4f46e5);
+            border-radius: 1px;
+        }
+        .timeline-item { position: relative; }
+        .timeline-dot {
+            position: absolute;
+            left: -40px;
+            top: 28px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 3px solid #4f46e5;
+            z-index: 1;
+        }
+        .timeline-item:first-child .timeline-dot {
+            background: #4f46e5;
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.2);
+        }
+        /* Nav */
         .nav-link { position: relative; }
-        .nav-link::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: #4f46e5; transition: width 0.3s ease; }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            transition: width 0.3s ease;
+        }
         .nav-link:hover::after { width: 100%; }
+        .nav-active::after { width: 100%; }
+        /* Button effects */
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4); }
+        .btn-outline { transition: all 0.3s ease; }
+        .btn-outline:hover { background-color: #4f46e5 !important; color: white !important; border-color: #4f46e5 !important; transform: translateY(-2px); }
+        .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); }
+        /* Back to top */
+        .back-to-top { opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+        .back-to-top.visible { opacity: 1; pointer-events: auto; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 transition-colors">
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full bg-white shadow-md z-50">
+    <nav class="fixed top-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm shadow-md z-50 transition-colors">
         <div class="container mx-auto px-6 py-4">
             <div class="flex justify-between items-center">
                 <h1 class="text-2xl font-bold gradient-text">Owen Mettam</h1>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#about" class="nav-link text-gray-600 hover:text-gray-900">About</a>
-                    <a href="#experience" class="nav-link text-gray-600 hover:text-gray-900">Experience</a>
-                    <a href="#education" class="nav-link text-gray-600 hover:text-gray-900">Education</a>
-                    <a href="#certifications" class="nav-link text-gray-600 hover:text-gray-900">Certifications</a>
-                    <a href="#skills" class="nav-link text-gray-600 hover:text-gray-900">Skills</a>
-                    <a href="#contact" class="nav-link text-gray-600 hover:text-gray-900">Contact</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">About</a>
+                    <a href="#experience" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Experience</a>
+                    <a href="#education" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Education</a>
+                    <a href="#certifications" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Certifications</a>
+                    <a href="#skills" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Skills</a>
+                    <a href="#contact" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Contact</a>
+                    <button id="dark-mode-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
+                        <i class="fas fa-moon text-lg icon-moon"></i>
+                        <i class="fas fa-sun text-lg icon-sun hidden"></i>
+                    </button>
                 </div>
-                <button id="mobile-menu-btn" class="md:hidden text-gray-600">
-                    <i class="fas fa-bars text-2xl"></i>
-                </button>
+                <div class="flex items-center space-x-3 md:hidden">
+                    <button id="dark-mode-toggle-mobile" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors">
+                        <i class="fas fa-moon text-lg icon-moon"></i>
+                        <i class="fas fa-sun text-lg icon-sun hidden"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-800 border-t dark:border-slate-700">
             <div class="px-6 py-4 space-y-3">
-                <a href="#about" class="block text-gray-600 hover:text-gray-900">About</a>
-                <a href="#experience" class="block text-gray-600 hover:text-gray-900">Experience</a>
-                <a href="#education" class="block text-gray-600 hover:text-gray-900">Education</a>
-                <a href="#certifications" class="block text-gray-600 hover:text-gray-900">Certifications</a>
-                <a href="#skills" class="block text-gray-600 hover:text-gray-900">Skills</a>
-                <a href="#contact" class="block text-gray-600 hover:text-gray-900">Contact</a>
+                <a href="#about" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">About</a>
+                <a href="#experience" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Experience</a>
+                <a href="#education" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Education</a>
+                <a href="#certifications" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Certifications</a>
+                <a href="#skills" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Skills</a>
+                <a href="#contact" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Contact</a>
             </div>
         </div>
     </nav>
 
     <!-- Hero Section -->
-    <section class="pt-24 pb-12 px-6 scroll-pt-16">
-        <div class="container mx-auto">
+    <section class="hero-gradient pt-32 pb-20 px-6">
+        <div class="container mx-auto relative z-10">
             <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="md:w-1/2 mb-8 md:mb-0 fade-in">
-                    <h2 class="text-4xl md:text-5xl font-bold mb-4">
-                        Hello, I'm <span class="gradient-text">Owen Mettam</span>
+                <div class="md:w-1/2 mb-10 md:mb-0 reveal">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4 text-white">
+                        Hello, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">Owen Mettam</span>
                     </h2>
-                    <p class="text-xl text-gray-600 mb-6">Technical Support Engineer | AI, Networking, and Collaboration</p>
-                    <p class="text-gray-700 mb-8 leading-relaxed">
+                    <p class="text-xl text-indigo-200 mb-6">Technical Support Engineer | AI, Networking, and Collaboration</p>
+                    <p class="text-indigo-100/80 mb-8 leading-relaxed max-w-lg">
                         IT engineer with experience in driving AI-powered support solutions, collaboration technology, and technical training, with hands-on experience implementing GenAI and MCP workflows in enterprise environments.
                     </p>
                     <div class="flex flex-wrap gap-4">
-                        <a href="#contact" class="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:shadow-lg transition-shadow">
+                        <a href="#contact" class="btn-primary bg-white text-indigo-700 font-semibold px-8 py-3 rounded-lg transition-all">
                             Get In Touch
                         </a>
-                        <a href="#experience" class="border-2 border-indigo-600 text-indigo-600 px-8 py-3 rounded-lg hover:bg-indigo-50 transition-colors">
+                        <a href="#experience" class="btn-outline border-2 border-indigo-300/50 text-indigo-200 px-8 py-3 rounded-lg">
                             View Experience
                         </a>
-                        <a href="Owen Mettam Resume.pdf" download="Owen Mettam Resume.pdf" class="bg-gray-800 text-white px-8 py-3 rounded-lg hover:shadow-lg transition-shadow flex items-center">
+                        <a href="Owen Mettam Resume.pdf" download="Owen Mettam Resume.pdf" class="btn-dark bg-white/10 backdrop-blur-sm text-white px-8 py-3 rounded-lg transition-all flex items-center">
                             <i class="fas fa-download mr-2"></i>
                             Download Resume
                         </a>
                     </div>
                 </div>
-                <div class="md:w-1/2 flex justify-center fade-in">
-                    <div class="w-64 h-64 rounded-full overflow-hidden shadow-2xl border-4 border-white">
-                        <img src="C81028FC-F723-4007-A819-5DE3B6E56C7F_1_105_c.jpeg" alt="Owen Mettam" class="w-full h-full object-cover">
+                <div class="md:w-1/2 flex justify-center reveal reveal-delay-2">
+                    <div class="photo-ring shadow-2xl">
+                        <div class="w-64 h-64 rounded-full overflow-hidden">
+                            <img src="C81028FC-F723-4007-A819-5DE3B6E56C7F_1_105_c.jpeg" alt="Owen Mettam" class="w-full h-full object-cover">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,15 +197,15 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-24 px-6 bg-white scroll-pt-20">
+    <section id="about" class="py-24 px-6 bg-white dark:bg-slate-900 scroll-pt-20 transition-colors">
         <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12">About Me</h2>
-            <div class="max-w-3xl mx-auto text-center">
-                <p class="text-gray-700 leading-relaxed mb-6">
+            <h2 class="text-3xl font-bold text-center mb-12 section-heading">About Me</h2>
+            <div class="max-w-3xl mx-auto text-center reveal">
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
                     I am an IT engineer with extensive experience in driving AI-powered support solutions, collaboration technology, and technical training. 
                     I have hands-on experience implementing GenAI and MCP workflows in enterprise environments, delivering innovative solutions that enhance efficiency and user experience.
                 </p>
-                <p class="text-gray-700 leading-relaxed">
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
                     Based in Western North Carolina, I specialize in Webex technologies, incident management, and creating educational content that empowers users and improves technical support processes.
                 </p>
             </div>
@@ -103,64 +213,73 @@
     </section>
 
     <!-- Experience Section -->
-    <section id="experience" class="py-16 px-6 bg-gray-50 scroll-pt-16">
+    <section id="experience" class="py-20 px-6 bg-gray-50 dark:bg-slate-800 scroll-pt-16 transition-colors">
         <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12">Professional Experience</h2>
+            <h2 class="text-3xl font-bold text-center mb-16 section-heading">Professional Experience</h2>
             <div class="max-w-4xl mx-auto">
-                <div class="space-y-8">
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex items-center">
-                                <img src="cisco.svg" alt="Cisco Logo" class="w-16 h-16 mr-4 rounded-lg">
-                                <div>
-                                    <h3 class="text-xl font-semibold">Technical Consulting Engineer</h3>
-                                    <p class="text-gray-600">Cisco</p>
-                                    <p class="text-sm text-indigo-600 font-medium">Morrisville, NC • Remote</p>
+                <div class="timeline">
+                    <div class="timeline-item mb-10 reveal">
+                        <div class="timeline-dot bg-white dark:bg-slate-800"></div>
+                        <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow-md card-hover">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
+                                <div class="flex items-center">
+                                    <img src="cisco.svg" alt="Cisco Logo" class="w-14 h-14 mr-4 rounded-lg bg-white p-1">
+                                    <div>
+                                        <h3 class="text-xl font-semibold">Technical Consulting Engineer</h3>
+                                        <p class="text-gray-600 dark:text-gray-400">Cisco</p>
+                                        <p class="text-sm text-indigo-600 dark:text-indigo-400 font-medium">Morrisville, NC • Remote</p>
+                                    </div>
                                 </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400 mt-2 sm:mt-0 sm:ml-4 whitespace-nowrap font-medium bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">July 2020 - Present</span>
                             </div>
-                            <span class="text-gray-500">July 2020 - Present</span>
+                            <ul class="text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside text-sm leading-relaxed">
+                                <li>Collaborated with customers to understand technical requirements and provide tailored Webex solutions, achieving over 96% customer satisfaction</li>
+                                <li>Designed and deployed AI-assisted support workflows using GenAI and MCP tool calls to automate Webex user management, reducing resolution time</li>
+                                <li>Created 22 video trainings with over 21k views, providing next-level content for customers to implement in their organizations</li>
+                                <li>Handled multiple executive-level escalations and incidents across the Webex portfolio</li>
+                                <li>Speaker at WebexOne 2025 in San Diego, CA for "Webex for Partners: Relationships, Settings, and You"</li>
+                            </ul>
                         </div>
-                        <ul class="text-gray-700 space-y-2 list-disc list-inside">
-                            <li>Collaborated with customers to understand technical requirements and provide tailored Webex solutions, achieving over 96% customer satisfaction</li>
-                            <li>Designed and deployed AI-assisted support workflows using GenAI and MCP tool calls to automate Webex user management, reducing resolution time</li>
-                            <li>Created 22 video trainings with over 21k views, providing next-level content for customers to implement in their organizations</li>
-                            <li>Handled multiple executive-level escalations and incidents across the Webex portfolio</li>
-                            <li>Speaker at WebexOne 2025 in San Diego, CA for "Webex for Partners: Relationships, Settings, and You"</li>
-                        </ul>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex items-center">
-                                <img src="x1OqMteU_400x400.jpg" alt="Western Carolina University Logo" class="w-16 h-16 mr-4 rounded-lg">
-                                <div>
-                                    <h3 class="text-xl font-semibold">Senior Data Analyst</h3>
-                                    <p class="text-gray-600">Western Carolina University - College of Business</p>
-                                    <p class="text-sm text-indigo-600 font-medium">Cullowhee, NC</p>
+                    <div class="timeline-item mb-10 reveal reveal-delay-1">
+                        <div class="timeline-dot bg-white dark:bg-slate-800"></div>
+                        <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow-md card-hover">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
+                                <div class="flex items-center">
+                                    <img src="x1OqMteU_400x400.jpg" alt="Western Carolina University Logo" class="w-14 h-14 mr-4 rounded-lg">
+                                    <div>
+                                        <h3 class="text-xl font-semibold">Senior Data Analyst</h3>
+                                        <p class="text-gray-600 dark:text-gray-400">Western Carolina University - College of Business</p>
+                                        <p class="text-sm text-indigo-600 dark:text-indigo-400 font-medium">Cullowhee, NC</p>
+                                    </div>
                                 </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400 mt-2 sm:mt-0 sm:ml-4 whitespace-nowrap font-medium bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">May 2019 - May 2020</span>
                             </div>
-                            <span class="text-gray-500">May 2019 - May 2020</span>
+                            <ul class="text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside text-sm leading-relaxed">
+                                <li>Managed the internal database team, including staffing and training of 2 employees</li>
+                                <li>Collaborated with front-end developers and stakeholders to create new workbooks and dashboards</li>
+                            </ul>
                         </div>
-                        <ul class="text-gray-700 space-y-2 list-disc list-inside">
-                            <li>Managed the internal database team, including staffing and training of 2 employees</li>
-                            <li>Collaborated with front-end developers and stakeholders to create new workbooks and dashboards</li>
-                        </ul>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex items-center">
-                                <img src="x1OqMteU_400x400.jpg" alt="Western Carolina University Logo" class="w-16 h-16 mr-4 rounded-lg">
-                                <div>
-                                    <h3 class="text-xl font-semibold">Student Technology Assistant</h3>
-                                    <p class="text-gray-600">Western Carolina University - Division of IT</p>
-                                    <p class="text-sm text-indigo-600 font-medium">Cullowhee, NC</p>
+                    <div class="timeline-item reveal reveal-delay-2">
+                        <div class="timeline-dot bg-white dark:bg-slate-800"></div>
+                        <div class="bg-white dark:bg-slate-700 p-6 rounded-xl shadow-md card-hover">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4">
+                                <div class="flex items-center">
+                                    <img src="x1OqMteU_400x400.jpg" alt="Western Carolina University Logo" class="w-14 h-14 mr-4 rounded-lg">
+                                    <div>
+                                        <h3 class="text-xl font-semibold">Student Technology Assistant</h3>
+                                        <p class="text-gray-600 dark:text-gray-400">Western Carolina University - Division of IT</p>
+                                        <p class="text-sm text-indigo-600 dark:text-indigo-400 font-medium">Cullowhee, NC</p>
+                                    </div>
                                 </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400 mt-2 sm:mt-0 sm:ml-4 whitespace-nowrap font-medium bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">Aug 2018 - May 2020</span>
                             </div>
-                            <span class="text-gray-500">August 2018 - May 2020</span>
+                            <ul class="text-gray-700 dark:text-gray-300 space-y-2 list-disc list-inside text-sm leading-relaxed">
+                                <li>Provided technical support and troubleshooting for hardware, software, and network issues to students, faculty, and staff</li>
+                                <li>Contributed to the delivery of training materials for end-users around IT services available to students</li>
+                            </ul>
                         </div>
-                        <ul class="text-gray-700 space-y-2 list-disc list-inside">
-                            <li>Provided technical support and troubleshooting for hardware, software, and network issues to students, faculty, and staff</li>
-                            <li>Contributed to the delivery of training materials for end-users around IT services available to students</li>
-                        </ul>
                     </div>
                 </div>
             </div>
@@ -168,36 +287,36 @@
     </section>
 
     <!-- Education Section -->
-    <section id="education" class="py-16 px-6 bg-white scroll-pt-16">
+    <section id="education" class="py-20 px-6 bg-white dark:bg-slate-900 scroll-pt-16 transition-colors">
         <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12">Education</h2>
+            <h2 class="text-3xl font-bold text-center mb-12 section-heading">Education</h2>
             <div class="max-w-4xl mx-auto">
                 <div class="space-y-8">
-                    <div class="bg-gray-50 p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex justify-between items-start mb-4">
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
                             <div class="flex items-center">
-                                <img src="x1OqMteU_400x400.jpg" alt="Western Carolina University Logo" class="w-16 h-16 mr-4 rounded-lg">
+                                <img src="x1OqMteU_400x400.jpg" alt="Western Carolina University Logo" class="w-14 h-14 mr-4 rounded-lg">
                                 <div>
                                     <h3 class="text-xl font-semibold">Bachelor of Science in Business Administration</h3>
-                                    <p class="text-gray-600">Computer Information Systems</p>
-                                    <p class="text-gray-600">Western Carolina University</p>
-                                    <p class="text-sm text-indigo-600 font-medium">Cullowhee, NC</p>
+                                    <p class="text-gray-600 dark:text-gray-400">Computer Information Systems</p>
+                                    <p class="text-gray-600 dark:text-gray-400">Western Carolina University</p>
+                                    <p class="text-sm text-indigo-600 dark:text-indigo-400 font-medium">Cullowhee, NC</p>
                                 </div>
                             </div>
-                            <span class="text-gray-500">August 2018 - May 2020</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400 mt-2 sm:mt-0 sm:ml-4 whitespace-nowrap font-medium bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">Aug 2018 - May 2020</span>
                         </div>
                     </div>
-                    <div class="bg-gray-50 p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex justify-between items-start mb-4">
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal reveal-delay-1">
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start">
                             <div class="flex items-center">
-                                <img src="VGCC logo for SkillPointe 220x220 (002).jpg" alt="Vance-Granville Community College Logo" class="w-16 h-16 mr-4 rounded-lg">
+                                <img src="VGCC logo for SkillPointe 220x220 (002).jpg" alt="Vance-Granville Community College Logo" class="w-14 h-14 mr-4 rounded-lg">
                                 <div>
                                     <h3 class="text-xl font-semibold">Associate of Arts</h3>
-                                    <p class="text-gray-600">Vance-Granville Community College</p>
-                                    <p class="text-sm text-indigo-600 font-medium">Henderson, NC</p>
+                                    <p class="text-gray-600 dark:text-gray-400">Vance-Granville Community College</p>
+                                    <p class="text-sm text-indigo-600 dark:text-indigo-400 font-medium">Henderson, NC</p>
                                 </div>
                             </div>
-                            <span class="text-gray-500">August 2016 - May 2018</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400 mt-2 sm:mt-0 sm:ml-4 whitespace-nowrap font-medium bg-indigo-50 dark:bg-indigo-900/30 px-3 py-1 rounded-full">Aug 2016 - May 2018</span>
                         </div>
                     </div>
                 </div>
@@ -206,85 +325,78 @@
     </section>
 
     <!-- Certifications Section -->
-    <section id="certifications" class="py-16 px-6 bg-gray-50 scroll-pt-16">
+    <section id="certifications" class="py-20 px-6 bg-gray-50 dark:bg-slate-800 scroll-pt-16 transition-colors">
         <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12">Certifications</h2>
-            <div class="max-w-4xl mx-auto">
-                <div class="space-y-8">
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex items-center mb-4">
-                            <img src="ccna_med.jpg" alt="Cisco CCNA Logo" class="w-16 h-16 mr-4 rounded-lg">
+            <h2 class="text-3xl font-bold text-center mb-12 section-heading">Certifications</h2>
+            <div class="max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-5 rounded-xl shadow-md card-hover reveal">
+                        <div class="flex items-center">
+                            <img src="ccna_med.jpg" alt="Cisco CCNA Logo" class="w-14 h-14 mr-4 rounded-lg flex-shrink-0">
                             <div>
-                                <h3 class="text-xl font-semibold">CCNA</h3>
-                                <p class="text-gray-600">Cisco</p>
-                                <p class="text-sm text-gray-500">October 2020 - March 2029</p>
-                                <p class="text-sm text-gray-500">Credential ID: 2QNCKYJHLCV4QB3Y</p>
+                                <h3 class="text-lg font-semibold">Cisco Certified Network Associate (CCNA)</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Cisco</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500">Oct 2020 - Mar 2029</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex items-center mb-4">
-                            <img src="AI Technical_Practitioner_Medium_Color.jpg" alt="Cisco AI Technical Practitioner Logo" class="w-16 h-16 mr-4 rounded-lg">
+                    <div class="p-5 rounded-xl shadow-md card-hover reveal reveal-delay-1">
+                        <div class="flex items-center">
+                            <img src="AI Technical_Practitioner_Medium_Color.jpg" alt="Cisco AI Technical Practitioner Logo" class="w-14 h-14 mr-4 rounded-lg flex-shrink-0">
                             <div>
-                                <h3 class="text-xl font-semibold">Certified AI Technical Practitioner (CCAITP)</h3>
-                                <p class="text-gray-600">Cisco</p>
-                                <p class="text-sm text-gray-500">January 2026 - March 2029</p>
-                                <p class="text-sm text-gray-500">Credential ID: a5ba5c376a464842bc9421546c2406ab</p>
+                                <h3 class="text-lg font-semibold">Cisco Certified AI Technical Practitioner (CCAITP)</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Cisco</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500">Jan 2026 - Mar 2029</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex items-center mb-4">
-                            <img src="Cisco_Specialist_Collaboration_150x150.jpg" alt="Cisco Specialist Collaboration Logo" class="w-16 h-16 mr-4 rounded-lg">
+                    <div class="p-5 rounded-xl shadow-md card-hover reveal reveal-delay-2">
+                        <div class="flex items-center">
+                            <img src="Cisco_Specialist_Collaboration_150x150.jpg" alt="Cisco Specialist Collaboration Logo" class="w-14 h-14 mr-4 rounded-lg flex-shrink-0">
                             <div>
-                                <h3 class="text-xl font-semibold">Cisco Specialist - Collaboration</h3>
-                                <p class="text-gray-600">Cisco</p>
-                                <p class="text-sm text-gray-500">October 2020 - October 2023</p>
-                                <p class="text-sm text-gray-500">Credential ID: 2QNCKYJHLCV4QB3Y</p>
+                                <h3 class="text-lg font-semibold">Cisco Certified Specialist - Collaboration Hybrid and Cloud (CCS-CHC)</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Cisco</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500">Feb 2026 - Mar 2029</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex items-center mb-4">
-                            <img src="itilv4 foundations.png" alt="ITIL 4 Foundations Logo" class="w-16 h-16 mr-4 rounded-lg">
+                    <div class="p-5 rounded-xl shadow-md card-hover reveal reveal-delay-3">
+                        <div class="flex items-center">
+                            <img src="itilv4 foundations.png" alt="ITIL 4 Foundations Logo" class="w-14 h-14 mr-4 rounded-lg flex-shrink-0">
                             <div>
-                                <h3 class="text-xl font-semibold">ITIL 4 Foundations</h3>
-                                <p class="text-gray-600">PeopleCert</p>
-                                <p class="text-sm text-gray-500">January 2022 - October 2027</p>
-                                <p class="text-sm text-gray-500">Credential ID: GR671358169OM</p>
+                                <h3 class="text-lg font-semibold">ITIL 4 Foundations</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">PeopleCert</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500">Jan 2022 - Oct 2027</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex items-center mb-4">
-                            <img src="MicrosoftAzureFundamentalsAZ-900.png" alt="Microsoft Azure Fundamentals Logo" class="w-16 h-16 mr-4 rounded-lg">
+                    <div class="p-5 rounded-xl shadow-md card-hover reveal reveal-delay-2">
+                        <div class="flex items-center">
+                            <img src="MicrosoftAzureFundamentalsAZ-900.png" alt="Microsoft Azure Fundamentals Logo" class="w-14 h-14 mr-4 rounded-lg flex-shrink-0">
                             <div>
-                                <h3 class="text-xl font-semibold">Azure Fundamentals (AZ-900)</h3>
-                                <p class="text-gray-600">Microsoft</p>
-                                <p class="text-sm text-gray-500">November 2020</p>
-                                <p class="text-sm text-gray-500">Credential ID: H562-4717</p>
+                                <h3 class="text-lg font-semibold">Azure Fundamentals (AZ-900)</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Microsoft</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500">November 2020</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex items-center mb-4">
-                            <img src="security-compliance-and-identity-fundamentals-600x600.png" alt="Microsoft Security Fundamentals Logo" class="w-16 h-16 mr-4 rounded-lg">
+                    <div class="p-5 rounded-xl shadow-md card-hover reveal reveal-delay-3">
+                        <div class="flex items-center">
+                            <img src="security-compliance-and-identity-fundamentals-600x600.png" alt="Microsoft Security Fundamentals Logo" class="w-14 h-14 mr-4 rounded-lg flex-shrink-0">
                             <div>
-                                <h3 class="text-xl font-semibold">Security, Compliance, and Identity Fundamentals (SC-900)</h3>
-                                <p class="text-gray-600">Microsoft</p>
-                                <p class="text-sm text-gray-500">March 2022</p>
-                                <p class="text-sm text-gray-500">Credential ID: I195-7025</p>
+                                <h3 class="text-lg font-semibold">Security, Compliance & Identity (SC-900)</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Microsoft</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500">March 2022</p>
                             </div>
                         </div>
                     </div>
-                    <div class="bg-white p-6 rounded-lg shadow-md card-hover">
-                        <div class="flex items-center mb-4">
-                            <img src="FortinetCertifiedAssociateCyber.png" alt="Fortinet Cybersecurity Logo" class="w-16 h-16 mr-4 rounded-lg">
+                    <div class="p-5 rounded-xl shadow-md card-hover reveal reveal-delay-4">
+                        <div class="flex items-center">
+                            <img src="FortinetCertifiedAssociateCyber.png" alt="Fortinet Cybersecurity Logo" class="w-14 h-14 mr-4 rounded-lg flex-shrink-0">
                             <div>
-                                <h3 class="text-xl font-semibold">Certified Associate Cybersecurity</h3>
-                                <p class="text-gray-600">Fortinet</p>
-                                <p class="text-sm text-gray-500">May 2025 - May 2027</p>
-                                <p class="text-sm text-gray-500">Credential ID: 4506583835OM</p>
+                                <h3 class="text-lg font-semibold">Certified Associate Cybersecurity</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Fortinet</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-500">May 2025 - May 2027</p>
                             </div>
                         </div>
                     </div>
@@ -294,28 +406,88 @@
     </section>
 
     <!-- Skills Section -->
-    <section id="skills" class="py-16 px-6 bg-gray-50 scroll-pt-16">
+    <section id="skills" class="py-20 px-6 bg-white dark:bg-slate-900 scroll-pt-16 transition-colors">
         <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12">Skills & Expertise</h2>
-            <div class="max-w-4xl mx-auto">
-                <div class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-3xl font-bold text-center mb-12 section-heading">Skills & Expertise</h2>
+            <div class="max-w-5xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mr-3">
+                                <i class="fas fa-robot text-purple-600 dark:text-purple-400 text-sm"></i>
+                            </span>
+                            AI & Automation
+                        </h3>
                         <div class="flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Generative AI (GenAI)</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Webex Technologies</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">MCP Workflows</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Azure/Entra AD</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Networking Principles</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Incident Management</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Customer Support</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Technical Training</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Speaker/Presenter</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Video Creator</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Active Directory</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">VoIP</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">APIs</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Okta</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">SIP</span>
-                            <span class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm">Adaptability</span>
+                            <span class="px-3 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-sm">Generative AI (GenAI)</span>
+                            <span class="px-3 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-sm">MCP Workflows</span>
+                            <span class="px-3 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-sm">REST APIs</span>
+                            <span class="px-3 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-sm">Prompt Engineering</span>
+                            <span class="px-3 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-sm">Python</span>
+                        </div>
+                    </div>
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal reveal-delay-1">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mr-3">
+                                <i class="fas fa-network-wired text-blue-600 dark:text-blue-400 text-sm"></i>
+                            </span>
+                            Networking & Security
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm">Networking</span>
+                            <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm">TCP/IP</span>
+                            <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm">Cybersecurity</span>
+                            <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm">DNS/DHCP</span>
+                            <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm">SSO/SAML</span>
+                            <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm">OAuth 2.0</span>
+                        </div>
+                    </div>
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal reveal-delay-2">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mr-3">
+                                <i class="fas fa-headset text-emerald-600 dark:text-emerald-400 text-sm"></i>
+                            </span>
+                            Collaboration Technologies
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 rounded-full text-sm">Webex</span>
+                            <span class="px-3 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 rounded-full text-sm">Webex Calling</span>
+                            <span class="px-3 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 rounded-full text-sm">VoIP/SIP</span>
+                            <span class="px-3 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 rounded-full text-sm">Zoom</span>
+                            <span class="px-3 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 rounded-full text-sm">PSTN/SBC</span>
+                        </div>
+                    </div>
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal reveal-delay-3">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mr-3">
+                                <i class="fas fa-toolbox text-amber-600 dark:text-amber-400 text-sm"></i>
+                            </span>
+                            Tools & Processes
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 rounded-full text-sm">ITIL</span>
+                            <span class="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 rounded-full text-sm">Incident Management</span>
+                            <span class="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 rounded-full text-sm">Project and Program Management</span>
+                            <span class="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 rounded-full text-sm">Jira/Confluence</span>
+                            <span class="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 rounded-full text-sm">Root Cause Analysis (RCA)</span>
+                            <span class="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 rounded-full text-sm">Change Management</span>
+                        </div>
+                    </div>
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal reveal-delay-4 md:col-span-2 md:max-w-[calc(50%-0.75rem)]">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center">
+                            <span class="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center mr-3">
+                                <i class="fas fa-chalkboard-teacher text-rose-600 dark:text-rose-400 text-sm"></i>
+                            </span>
+                            Communication & Teaching
+                        </h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 rounded-full text-sm">Technical Content Creation</span>
+                            <span class="px-3 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 rounded-full text-sm">Public Speaking</span>
+                            <span class="px-3 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 rounded-full text-sm">Conference Speaker</span>
+                            <span class="px-3 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 rounded-full text-sm">Remote, Hybrid, and In-Person Collaboration</span>
+                            <span class="px-3 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 rounded-full text-sm">Technical Documentation</span>
+                            <span class="px-3 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 rounded-full text-sm">Mentoring and Coaching</span>
+                            <span class="px-3 py-1 bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 rounded-full text-sm">Video Production</span>
                         </div>
                     </div>
                 </div>
@@ -324,38 +496,86 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-16 px-6 bg-white scroll-pt-16">
+    <section id="contact" class="py-20 px-6 bg-gray-50 dark:bg-slate-800 scroll-pt-16 transition-colors">
         <div class="container mx-auto">
-            <h2 class="text-3xl font-bold text-center mb-12">Get In Touch</h2>
+            <h2 class="text-3xl font-bold text-center mb-12 section-heading">Get In Touch</h2>
             <div class="max-w-4xl mx-auto">
-                <div class="bg-gray-50 p-8 rounded-lg">
-                    <h3 class="text-xl font-semibold mb-6">Contact Information</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center">
-                            <i class="fas fa-envelope text-indigo-600 w-6"></i>
-                            <span class="ml-3">owenmettam@gmail.com</span>
+                <div class="bg-white dark:bg-slate-700 p-8 rounded-xl shadow-md reveal">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="text-xl font-semibold mb-6">Contact Information</h3>
+                            <div class="space-y-5">
+                                <div class="flex items-center group">
+                                    <span class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center mr-4 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/50 transition-colors">
+                                        <i class="fas fa-envelope text-indigo-600 dark:text-indigo-400"></i>
+                                    </span>
+                                    <span class="text-gray-700 dark:text-gray-300">owenmettam@gmail.com</span>
+                                </div>
+                                <div class="flex items-center group">
+                                    <span class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center mr-4 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/50 transition-colors">
+                                        <i class="fas fa-phone text-indigo-600 dark:text-indigo-400"></i>
+                                    </span>
+                                    <span class="text-gray-700 dark:text-gray-300">919-579-1011</span>
+                                </div>
+                                <div class="flex items-center group">
+                                    <span class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center mr-4 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/50 transition-colors">
+                                        <i class="fas fa-map-marker-alt text-indigo-600 dark:text-indigo-400"></i>
+                                    </span>
+                                    <span class="text-gray-700 dark:text-gray-300">Western North Carolina, USA</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-phone text-indigo-600 w-6"></i>
-                            <span class="ml-3">919-579-1011</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fas fa-map-marker-alt text-indigo-600 w-6"></i>
-                            <span class="ml-3">Western North Carolina, USA</span>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fab fa-linkedin text-indigo-600 w-6"></i>
-                            <a href="https://www.linkedin.com/in/owen-mettam/" target="_blank" class="ml-3 text-indigo-600 hover:text-indigo-800 transition-colors">LinkedIn Profile</a>
-                        </div>
-                        <div class="flex items-center">
-                            <i class="fab fa-youtube text-indigo-600 w-6"></i>
-                            <a href="https://www.youtube.com/watch?v=w026n6BKamk&list=PLTjVVJoGyXSIbV2a8bdPI5NxLReKc8Huc" target="_blank" class="ml-3 text-indigo-600 hover:text-indigo-800 transition-colors">YouTube Channel</a>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-6">Connect With Me</h3>
+                            <div class="space-y-5">
+                                <a href="https://www.linkedin.com/in/owen-mettam/" target="_blank" class="flex items-center group">
+                                    <span class="w-10 h-10 rounded-lg bg-blue-50 dark:bg-blue-900/30 flex items-center justify-center mr-4 group-hover:bg-blue-100 dark:group-hover:bg-blue-900/50 transition-colors">
+                                        <i class="fab fa-linkedin text-blue-600 dark:text-blue-400"></i>
+                                    </span>
+                                    <span class="text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">LinkedIn Profile</span>
+                                </a>
+                                <a href="https://www.youtube.com/watch?v=w026n6BKamk&list=PLTjVVJoGyXSIbV2a8bdPI5NxLReKc8Huc" target="_blank" class="flex items-center group">
+                                    <span class="w-10 h-10 rounded-lg bg-red-50 dark:bg-red-900/30 flex items-center justify-center mr-4 group-hover:bg-red-100 dark:group-hover:bg-red-900/50 transition-colors">
+                                        <i class="fab fa-youtube text-red-600 dark:text-red-400"></i>
+                                    </span>
+                                    <span class="text-gray-700 dark:text-gray-300 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">YouTube Channel</span>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 px-6">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <h3 class="text-white text-xl font-bold mb-2">Owen Mettam</h3>
+                    <p class="text-sm">Technical Support Engineer | AI, Networking, and Collaboration</p>
+                </div>
+                <div class="flex space-x-4 mb-6 md:mb-0">
+                    <a href="https://www.linkedin.com/in/owen-mettam/" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition-colors group">
+                        <i class="fab fa-linkedin text-gray-400 group-hover:text-white transition-colors"></i>
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=w026n6BKamk&list=PLTjVVJoGyXSIbV2a8bdPI5NxLReKc8Huc" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 transition-colors group">
+                        <i class="fab fa-youtube text-gray-400 group-hover:text-white transition-colors"></i>
+                    </a>
+                    <a href="mailto:owenmettam@gmail.com" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition-colors group">
+                        <i class="fas fa-envelope text-gray-400 group-hover:text-white transition-colors"></i>
+                    </a>
+                </div>
+                <p class="text-sm">&copy; 2026 Owen Mettam. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top fixed bottom-8 right-8 w-12 h-12 bg-indigo-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-indigo-700 transition-colors z-40">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
     <script src="script.js"></script>
 </body>
