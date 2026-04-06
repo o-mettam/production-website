@@ -2,12 +2,20 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "website",
   "compatibility_date": "2025-09-27",
+  "main": "src/index.js",
   "observability": {
     "enabled": true
   },
   "assets": {
-    "directory": "."
+    "directory": ".",
+    "binding": "ASSETS"
   },
+  "kv_namespaces": [
+    {
+      "binding": "RATE_LIMIT",
+      "id": "RATE_LIMIT"
+    }
+  ],
   "compatibility_flags": [
     "nodejs_compat"
   ]
