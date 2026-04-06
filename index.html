@@ -135,6 +135,11 @@
         /* Back to top */
         .back-to-top { opacity: 0; pointer-events: none; transition: all 0.3s ease; }
         .back-to-top.visible { opacity: 1; pointer-events: auto; }
+        /* GitHub chart */
+        .gh-chart { width: 100%; height: auto; border-radius: 8px; }
+        .dark .gh-chart-light { display: none; }
+        .gh-chart-dark { display: none; }
+        .dark .gh-chart-dark { display: block; filter: brightness(1.1); }
         /* Page loader */
         .page-loader {
             position: fixed;
@@ -179,6 +184,7 @@
                     <a href="#education" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Education</a>
                     <a href="#certifications" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Certifications</a>
                     <a href="#skills" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Skills</a>
+                    <a href="#github" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">GitHub</a>
                     <a href="#contact" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Contact</a>
                     <button id="dark-mode-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" aria-label="Toggle dark mode">
                         <i class="fas fa-moon text-lg icon-moon" aria-hidden="true"></i>
@@ -204,6 +210,7 @@
                 <a href="#education" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Education</a>
                 <a href="#certifications" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Certifications</a>
                 <a href="#skills" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Skills</a>
+                <a href="#github" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">GitHub</a>
                 <a href="#contact" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Contact</a>
             </div>
         </div>
@@ -544,6 +551,28 @@
         </div>
     </section>
 
+    <!-- GitHub Contributions Section -->
+    <section id="github" class="py-20 px-6 bg-gray-50 dark:bg-slate-800 scroll-pt-16 transition-colors">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-4 section-heading">GitHub Contributions</h2>
+            <p class="text-center text-gray-600 dark:text-gray-400 mb-12 max-w-lg mx-auto">My open-source activity and coding contributions over the past year.</p>
+            <div class="max-w-5xl mx-auto reveal">
+                <div class="bg-white dark:bg-slate-700 p-6 md:p-8 rounded-xl shadow-md card-hover">
+                    <div class="overflow-x-auto">
+                        <img src="https://ghchart.rshah.org/o-mettam" alt="Owen Mettam's GitHub contribution chart" class="gh-chart gh-chart-light">
+                        <img src="https://ghchart.rshah.org/44a340/o-mettam" alt="Owen Mettam's GitHub contribution chart" class="gh-chart gh-chart-dark">
+                    </div>
+                    <div class="mt-6 text-center">
+                        <a href="https://github.com/o-mettam" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium transition-colors">
+                            <i class="fab fa-github mr-2" aria-hidden="true"></i>
+                            View Full Profile on GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Contact Section -->
     <section id="contact" class="py-20 px-6 bg-gray-50 dark:bg-slate-800 scroll-pt-16 transition-colors">
         <div class="container mx-auto">
@@ -611,6 +640,9 @@
                     </a>
                     <a href="https://www.youtube.com/watch?v=w026n6BKamk&list=PLTjVVJoGyXSIbV2a8bdPI5NxLReKc8Huc" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 transition-colors group" aria-label="YouTube channel">
                         <i class="fab fa-youtube text-gray-400 group-hover:text-white transition-colors" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://github.com/o-mettam" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-600 transition-colors group" aria-label="GitHub profile">
+                        <i class="fab fa-github text-gray-400 group-hover:text-white transition-colors" aria-hidden="true"></i>
                     </a>
                     <a href="mailto:owenmettam@gmail.com" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition-colors group" aria-label="Send email">
                         <i class="fas fa-envelope text-gray-400 group-hover:text-white transition-colors" aria-hidden="true"></i>
