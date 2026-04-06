@@ -5,8 +5,8 @@ export default {
     const key = `rate:${ip}`;
 
     // Rate limit configuration
-    const LIMIT = 60;   // max requests per window
-    const WINDOW = 60;  // window in seconds
+    const LIMIT = 1;   // max requests per window
+    const WINDOW = 5;  // window in seconds
 
     // Check current request count for this IP
     const current = await env.RATE_LIMIT.get(key);
