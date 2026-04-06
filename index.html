@@ -46,12 +46,21 @@
         .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(79, 70, 229, 0.1); }
         .dark .card-hover:hover { box-shadow: 0 20px 40px rgba(129, 140, 248, 0.08); }
         /* Reveal animations */
-        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+        .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+        .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal-right.visible { opacity: 1; transform: translateX(0); }
+        .reveal-scale { opacity: 0; transform: scale(0.92); transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
         .reveal-delay-1 { transition-delay: 0.1s; }
         .reveal-delay-2 { transition-delay: 0.2s; }
         .reveal-delay-3 { transition-delay: 0.3s; }
         .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+        /* Smooth section transitions */
+        section { transition: background-color 0.3s ease; }
         /* Hero */
         .hero-gradient {
             background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%);
@@ -166,6 +175,30 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        /* Print stylesheet */
+        @media print {
+            body { background: white !important; color: #1a1a1a !important; font-size: 11pt; }
+            nav, .page-loader, #back-to-top, .back-to-top, footer, .btn-primary, .btn-outline, .btn-dark { display: none !important; }
+            .hero-gradient { background: white !important; padding-top: 0 !important; }
+            .hero-gradient::before { display: none !important; }
+            .hero-gradient h2, .hero-gradient p, .hero-gradient span { color: #1a1a1a !important; -webkit-text-fill-color: #1a1a1a !important; }
+            section { padding: 16pt 0 !important; break-inside: avoid; }
+            .reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 1 !important; transform: none !important; }
+            .card-hover { box-shadow: none !important; border: 1px solid #ddd !important; }
+            .card-hover:hover { transform: none !important; }
+            .photo-ring { display: none !important; }
+            .gh-chart-dark { display: none !important; }
+            .gh-chart-light { display: block !important; }
+            .dark .gh-chart-light { display: block !important; }
+            .gradient-text, .section-heading { -webkit-text-fill-color: #1a1a1a !important; color: #1a1a1a !important; background: none !important; }
+            .section-heading::after { background: #1a1a1a !important; }
+            a { color: #1a1a1a !important; text-decoration: underline !important; }
+            a[href]::after { content: " (" attr(href) ")"; font-size: 9pt; color: #666; }
+            a[href^="#"]::after { content: none; }
+            .timeline::before { background: #999 !important; }
+            .timeline-dot { border-color: #999 !important; }
+            * { box-shadow: none !important; text-shadow: none !important; }
+        }
     </style>
 </head>
 <body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 transition-colors">
@@ -220,7 +253,7 @@
     <section class="hero-gradient pt-32 pb-20 px-6">
         <div class="container mx-auto relative z-10">
             <div class="flex flex-col md:flex-row items-center justify-between">
-                <div class="md:w-1/2 mb-10 md:mb-0 reveal">
+                <div class="md:w-1/2 mb-10 md:mb-0 reveal-left">
                     <h2 class="text-4xl md:text-5xl font-bold mb-4 text-white">
                         Hello, I'm <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-purple-300">Owen Mettam</span>
                     </h2>
@@ -241,7 +274,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="md:w-1/2 flex justify-center reveal reveal-delay-2">
+                <div class="md:w-1/2 flex justify-center reveal-right reveal-delay-2">
                     <div class="photo-ring shadow-2xl">
                         <div class="w-64 h-64 rounded-full overflow-hidden">
                             <img src="C81028FC-F723-4007-A819-5DE3B6E56C7F_1_105_c.jpeg" alt="Owen Mettam" class="w-full h-full object-cover">
@@ -256,7 +289,7 @@
     <section id="about" class="py-24 px-6 bg-white dark:bg-slate-900 scroll-pt-20 transition-colors">
         <div class="container mx-auto">
             <h2 class="text-3xl font-bold text-center mb-12 section-heading">About Me</h2>
-            <div class="max-w-3xl mx-auto text-center reveal">
+            <div class="max-w-3xl mx-auto text-center reveal-scale">
                 <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
                     I am an IT engineer with extensive experience in driving AI-powered support solutions, collaboration technology, and technical training. 
                     I have hands-on experience implementing GenAI and MCP workflows in enterprise environments, delivering innovative solutions that enhance efficiency and user experience.
@@ -467,7 +500,7 @@
             <h2 class="text-3xl font-bold text-center mb-12 section-heading">Skills & Expertise</h2>
             <div class="max-w-5xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="p-6 rounded-xl shadow-md card-hover reveal">
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal-left">
                         <h3 class="text-lg font-semibold mb-4 flex items-center">
                             <span class="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mr-3">
                                 <i class="fas fa-robot text-purple-600 dark:text-purple-400 text-sm"></i>
@@ -482,7 +515,7 @@
                             <span class="px-3 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-sm">Python</span>
                         </div>
                     </div>
-                    <div class="p-6 rounded-xl shadow-md card-hover reveal reveal-delay-1">
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal-right reveal-delay-1">
                         <h3 class="text-lg font-semibold mb-4 flex items-center">
                             <span class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mr-3">
                                 <i class="fas fa-network-wired text-blue-600 dark:text-blue-400 text-sm"></i>
@@ -498,7 +531,7 @@
                             <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm">OAuth 2.0</span>
                         </div>
                     </div>
-                    <div class="p-6 rounded-xl shadow-md card-hover reveal reveal-delay-2">
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal-left reveal-delay-2">
                         <h3 class="text-lg font-semibold mb-4 flex items-center">
                             <span class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center mr-3">
                                 <i class="fas fa-headset text-emerald-600 dark:text-emerald-400 text-sm"></i>
@@ -513,7 +546,7 @@
                             <span class="px-3 py-1 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 rounded-full text-sm">PSTN/SBC</span>
                         </div>
                     </div>
-                    <div class="p-6 rounded-xl shadow-md card-hover reveal reveal-delay-3">
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal-right reveal-delay-3">
                         <h3 class="text-lg font-semibold mb-4 flex items-center">
                             <span class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center mr-3">
                                 <i class="fas fa-toolbox text-amber-600 dark:text-amber-400 text-sm"></i>
@@ -529,7 +562,7 @@
                             <span class="px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 rounded-full text-sm">Change Management</span>
                         </div>
                     </div>
-                    <div class="p-6 rounded-xl shadow-md card-hover reveal reveal-delay-4 md:col-span-2 md:max-w-[calc(50%-0.75rem)]">
+                    <div class="p-6 rounded-xl shadow-md card-hover reveal-scale reveal-delay-4 md:col-span-2 md:max-w-[calc(50%-0.75rem)]">
                         <h3 class="text-lg font-semibold mb-4 flex items-center">
                             <span class="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-900/30 flex items-center justify-center mr-3">
                                 <i class="fas fa-chalkboard-teacher text-rose-600 dark:text-rose-400 text-sm"></i>
