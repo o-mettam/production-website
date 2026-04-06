@@ -11,11 +11,47 @@ window.addEventListener('load', () => {
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
 
+function closeMobileMenu() {
+    mobileMenu.classList.add('hidden');
+    mobileMenuBtn.setAttribute('aria-expanded', false);
+    mobileMenuBtn.setAttribute('aria-label', 'Open navigation menu');
+    mobileMenuBtn.focus();
+}
+
+function openMobileMenu() {
+    mobileMenu.classList.remove('hidden');
+    mobileMenuBtn.setAttribute('aria-expanded', true);
+    mobileMenuBtn.setAttribute('aria-label', 'Close navigation menu');
+    const firstLink = mobileMenu.querySelector('a');
+    if (firstLink) firstLink.focus();
+}
+
 mobileMenuBtn.addEventListener('click', () => {
-    mobileMenu.classList.toggle('hidden');
-    const isOpen = !mobileMenu.classList.contains('hidden');
-    mobileMenuBtn.setAttribute('aria-expanded', isOpen);
-    mobileMenuBtn.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
+    const isHidden = mobileMenu.classList.contains('hidden');
+    isHidden ? openMobileMenu() : closeMobileMenu();
+});
+
+// Close mobile menu on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+        closeMobileMenu();
+    }
+});
+
+// Trap focus within mobile menu when open
+mobileMenu.addEventListener('keydown', (e) => {
+    if (e.key !== 'Tab') return;
+    const focusable = mobileMenu.querySelectorAll('a, button');
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+    }
 });
 
 // Smooth scrolling for navigation links
@@ -29,7 +65,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 block: 'start'
             });
             // Close mobile menu if open
-            mobileMenu.classList.add('hidden');
+            closeMobileMenu();
         }
     });
 });
@@ -76,8 +112,11 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => revealObserver.observe(el));
 
-// Active nav highlight on scroll
+// Combined scroll handler: active nav highlight + back-to-top button
+const backToTop = document.getElementById('back-to-top');
+
 window.addEventListener('scroll', () => {
+    // Active nav highlight
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav-link');
     let current = '';
@@ -94,12 +133,8 @@ window.addEventListener('scroll', () => {
             link.classList.add('nav-active', 'text-indigo-600');
         }
     });
-});
 
-// Back to top button
-const backToTop = document.getElementById('back-to-top');
-
-window.addEventListener('scroll', () => {
+    // Back to top visibility
     backToTop.classList.toggle('visible', window.scrollY > 500);
 });
 
