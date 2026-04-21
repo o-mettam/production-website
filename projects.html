@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Owen Mettam</title>
+    <meta name="description" content="Projects and open-source work by Owen Mettam. Explore GitHub repositories covering AI, networking, collaboration tools, and more.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://owenmettam.com/projects">
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="headshot.jpeg">
+    <link rel="apple-touch-icon" href="headshot.jpeg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { darkMode: 'class' }</script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text {
+            color: #4f46e5;
+            font-weight: 700;
+        }
+        .dark .gradient-text {
+            color: #818cf8;
+        }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(79, 70, 229, 0.1); }
+        .dark .card-hover:hover { box-shadow: 0 20px 40px rgba(129, 140, 248, 0.08); }
+        /* Reveal animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal.visible { opacity: 1; transform: translateY(0) scale(1); }
+        .reveal-scale { opacity: 0; transform: scale(0.92); transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+        .reveal-scale.visible { opacity: 1; transform: scale(1); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+        .reveal-delay-5 { transition-delay: 0.5s; }
+        /* Section heading accent */
+        .section-heading::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #4f46e5;
+            border-radius: 2px;
+            margin: 12px auto 0;
+        }
+        /* Nav */
+        .nav-link { position: relative; }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #4f46e5;
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after { width: 100%; }
+        .nav-active::after { width: 100%; }
+        /* Page loader */
+        .page-loader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1e1b4b;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .page-loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid rgba(129, 140, 248, 0.2);
+            border-top-color: #818cf8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Hero */
+        .hero-gradient {
+            background: #312e81;
+            position: relative;
+            overflow: hidden;
+        }
+        /* GitHub chart */
+        .gh-chart { width: 100%; height: auto; border-radius: 8px; }
+        .dark .gh-chart-light { display: none; }
+        .gh-chart-dark { display: none; }
+        .dark .gh-chart-dark { display: block; filter: brightness(1.1); }
+        /* Back to top */
+        .back-to-top { opacity: 0; pointer-events: none; transition: all 0.3s ease; }
+        .back-to-top.visible { opacity: 1; pointer-events: auto; }
+        /* Print stylesheet */
+        @media print {
+            body { background: white !important; color: #1a1a1a !important; font-size: 11pt; }
+            nav, .page-loader, #back-to-top, .back-to-top, footer { display: none !important; }
+            .reveal, .reveal-scale { opacity: 1 !important; transform: none !important; }
+            .card-hover { box-shadow: none !important; border: 1px solid #ddd !important; }
+            .card-hover:hover { transform: none !important; }
+            .gradient-text, .section-heading { color: #1a1a1a !important; }
+            .section-heading::after { background: #1a1a1a !important; }
+            a { color: #1a1a1a !important; text-decoration: underline !important; }
+            * { box-shadow: none !important; text-shadow: none !important; }
+        }
+    </style>
+    <noscript>
+        <style>
+            .page-loader { display: none !important; }
+            .reveal, .reveal-scale { opacity: 1 !important; transform: none !important; }
+        </style>
+    </noscript>
+</head>
+<body class="bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-gray-200 transition-colors">
+    <!-- Page Loader -->
+    <div id="page-loader" class="page-loader" aria-hidden="true">
+        <div class="loader-spinner"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 dark:bg-slate-900/95 backdrop-blur-sm shadow-md z-50 transition-colors" aria-label="Main navigation">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="text-2xl font-bold gradient-text">Owen Mettam</a>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="index.html#about" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">About</a>
+                    <a href="index.html#experience" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Experience</a>
+                    <a href="index.html#certifications" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Certifications</a>
+                    <a href="projects.html" class="nav-link nav-active text-indigo-600 dark:text-indigo-400 hover:text-gray-900 dark:hover:text-white">Projects</a>
+                    <a href="index.html#contact" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Contact</a>
+                    <button id="dark-mode-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon text-lg icon-moon" aria-hidden="true"></i>
+                        <i class="fas fa-sun text-lg icon-sun hidden" aria-hidden="true"></i>
+                    </button>
+                </div>
+                <div class="flex items-center space-x-3 md:hidden">
+                    <button id="dark-mode-toggle-mobile" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" aria-label="Toggle dark mode">
+                        <i class="fas fa-moon text-lg icon-moon" aria-hidden="true"></i>
+                        <i class="fas fa-sun text-lg icon-sun hidden" aria-hidden="true"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-gray-600 dark:text-gray-300" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobile-menu">
+                        <i class="fas fa-bars text-2xl" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-slate-800 border-t dark:border-slate-700" role="navigation" aria-label="Mobile navigation">
+            <div class="px-6 py-4 space-y-3">
+                <a href="index.html#about" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">About</a>
+                <a href="index.html#experience" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Experience</a>
+                <a href="index.html#certifications" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Certifications</a>
+                <a href="projects.html" class="block text-indigo-600 dark:text-indigo-400 font-medium">Projects</a>
+                <a href="index.html#contact" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-32 pb-16 px-6">
+        <div class="container mx-auto relative z-10 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white reveal-scale">Projects</h1>
+            <p class="text-xl text-indigo-200 max-w-2xl mx-auto reveal-scale reveal-delay-1">A collection of my open-source work and personal projects.</p>
+        </div>
+    </section>
+
+    <!-- Projects Grid -->
+    <section class="py-20 px-6 bg-white dark:bg-slate-900 transition-colors">
+        <div class="container mx-auto">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Project Card 1 -->
+                    <a href="https://github.com/o-mettam/production-website" target="_blank" rel="noopener noreferrer" class="bg-white dark:bg-slate-700 rounded-xl shadow-md card-hover overflow-hidden reveal block cursor-pointer">
+                        <div class="p-6 flex flex-col h-full">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-10 h-10 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center">
+                                    <i class="fas fa-globe text-indigo-600 dark:text-indigo-400"></i>
+                                </div>
+                                <i class="fab fa-github text-xl text-gray-400"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Personal Website</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 leading-relaxed">My personal portfolio website built with Tailwind CSS and deployed on Cloudflare Workers.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-full text-xs">HTML</span>
+                                <span class="px-2 py-1 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-full text-xs">Tailwind CSS</span>
+                                <span class="px-2 py-1 bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 rounded-full text-xs">JavaScript</span>
+                            </div>
+                            <div class="flex items-center text-indigo-600 dark:text-indigo-400 text-sm font-medium mt-auto">
+                                <span>View on GitHub</span>
+                                <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Project Card 2 — HomeAssistant-WebexStatus -->
+                    <a href="https://github.com/o-mettam/HomeAssistant-WebexStatus" target="_blank" rel="noopener noreferrer" class="bg-white dark:bg-slate-700 rounded-xl shadow-md card-hover overflow-hidden reveal reveal-delay-1 block cursor-pointer">
+                        <div class="p-6 flex flex-col h-full">
+                            <div class="flex items-center justify-between mb-4">
+                                <div class="w-10 h-10 rounded-lg bg-purple-50 dark:bg-purple-900/30 flex items-center justify-center">
+                                    <i class="fas fa-home text-purple-600 dark:text-purple-400"></i>
+                                </div>
+                                <i class="fab fa-github text-xl text-gray-400"></i>
+                            </div>
+                            <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Webex Status for Home Assistant</h3>
+                            <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 leading-relaxed">A custom Home Assistant integration that exposes your Webex presence status as a sensor entity — know when someone is in a meeting, on a call, or presenting right from your dashboard.</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="px-2 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-xs">Python</span>
+                                <span class="px-2 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-xs">Home Assistant</span>
+                                <span class="px-2 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-xs">Webex</span>
+                                <span class="px-2 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 rounded-full text-xs">Automation</span>
+                            </div>
+                            <div class="flex items-center text-indigo-600 dark:text-indigo-400 text-sm font-medium mt-auto">
+                                <span>View on GitHub</span>
+                                <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GitHub Contributions Section -->
+    <section class="py-20 px-6 bg-gray-50 dark:bg-slate-800 transition-colors">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-4 section-heading">GitHub Contributions</h2>
+            <p class="text-center text-gray-600 dark:text-gray-400 mb-12 max-w-lg mx-auto">My open-source activity and coding contributions over the past year.</p>
+            <div class="max-w-5xl mx-auto reveal">
+                <div class="bg-white dark:bg-slate-700 p-6 md:p-8 rounded-xl shadow-md card-hover">
+                    <div class="overflow-x-auto">
+                        <img src="https://ghchart.rshah.org/o-mettam" alt="Owen Mettam's GitHub contribution chart" class="gh-chart gh-chart-light">
+                        <img src="https://ghchart.rshah.org/44a340/o-mettam" alt="Owen Mettam's GitHub contribution chart" class="gh-chart gh-chart-dark">
+                    </div>
+                    <div class="mt-6 text-center">
+                        <a href="https://github.com/o-mettam" target="_blank" rel="noopener noreferrer" class="inline-flex items-center text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium transition-colors">
+                            <i class="fab fa-github mr-2" aria-hidden="true"></i>
+                            View Full Profile on GitHub
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-400 py-12 px-6">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0 text-center md:text-left">
+                    <h3 class="text-white text-xl font-bold mb-2">Owen Mettam</h3>
+                    <p class="text-sm">Technical Support Engineer | AI, Networking, and Collaboration</p>
+                </div>
+                <div class="flex space-x-4 mb-6 md:mb-0">
+                    <a href="https://www.linkedin.com/in/owen-mettam/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition-colors group" aria-label="LinkedIn profile">
+                        <i class="fab fa-linkedin text-gray-400 group-hover:text-white transition-colors" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=w026n6BKamk&list=PLTjVVJoGyXSIbV2a8bdPI5NxLReKc8Huc" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-red-600 transition-colors group" aria-label="YouTube channel">
+                        <i class="fab fa-youtube text-gray-400 group-hover:text-white transition-colors" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://github.com/o-mettam" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-600 transition-colors group" aria-label="GitHub profile">
+                        <i class="fab fa-github text-gray-400 group-hover:text-white transition-colors" aria-hidden="true"></i>
+                    </a>
+                    <a href="mailto:owenmettam@gmail.com" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-indigo-600 transition-colors group" aria-label="Send email">
+                        <i class="fas fa-envelope text-gray-400 group-hover:text-white transition-colors" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <p class="text-sm">&copy; 2026 Owen Mettam. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" class="back-to-top fixed bottom-8 right-8 w-12 h-12 bg-indigo-600 text-white rounded-full shadow-lg flex items-center justify-center hover:bg-indigo-700 transition-colors z-40" aria-label="Back to top">
+        <i class="fas fa-arrow-up" aria-hidden="true"></i>
+    </button>
+
+    <script>
+        // Page loader
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('page-loader');
+            if (loader) {
+                loader.classList.add('hidden');
+                setTimeout(() => loader.remove(), 500);
+            }
+        });
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+            mobileMenuBtn.setAttribute('aria-expanded', false);
+            mobileMenuBtn.setAttribute('aria-label', 'Open navigation menu');
+            mobileMenuBtn.focus();
+        }
+
+        function openMobileMenu() {
+            mobileMenu.classList.remove('hidden');
+            mobileMenuBtn.setAttribute('aria-expanded', true);
+            mobileMenuBtn.setAttribute('aria-label', 'Close navigation menu');
+            const firstLink = mobileMenu.querySelector('a');
+            if (firstLink) firstLink.focus();
+        }
+
+        mobileMenuBtn.addEventListener('click', () => {
+            const isHidden = mobileMenu.classList.contains('hidden');
+            isHidden ? openMobileMenu() : closeMobileMenu();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Dark mode
+        function initDarkMode() {
+            const toggleDesktop = document.getElementById('dark-mode-toggle');
+            const toggleMobile = document.getElementById('dark-mode-toggle-mobile');
+            const html = document.documentElement;
+
+            if (localStorage.getItem('darkMode') === 'true' ||
+                (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                html.classList.add('dark');
+                updateDarkModeIcons(true);
+            }
+
+            [toggleDesktop, toggleMobile].forEach(btn => {
+                if (btn) {
+                    btn.addEventListener('click', () => {
+                        html.classList.toggle('dark');
+                        const isDark = html.classList.contains('dark');
+                        localStorage.setItem('darkMode', isDark);
+                        updateDarkModeIcons(isDark);
+                    });
+                }
+            });
+        }
+
+        function updateDarkModeIcons(isDark) {
+            document.querySelectorAll('.icon-moon').forEach(el => el.classList.toggle('hidden', isDark));
+            document.querySelectorAll('.icon-sun').forEach(el => el.classList.toggle('hidden', !isDark));
+        }
+
+        initDarkMode();
+
+        // Scroll-triggered reveal animations
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll('.reveal, .reveal-scale').forEach(el => revealObserver.observe(el));
+
+        // Back to top
+        const backToTop = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            backToTop.classList.toggle('visible', window.scrollY > 500);
+        });
+        backToTop.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
