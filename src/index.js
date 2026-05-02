@@ -29,7 +29,25 @@ export default {
     try {
       // Check current request count for this IP
       const current = await env.RATE_LIMIT.get(key);
-      const count = current ? parseInt(current, 10) : 0;
+      let count = 0;
+      let windowStart = Date.now();
+
+      if (current) {
+        try {
+          const data = JSON.parse(current);
+          count = data.count;
+          windowStart = data.windowStart;
+        } catch {
+          // Legacy or corrupt value — reset
+        }
+      }
+
+      // If the window has expired, reset the counter
+      const elapsed = Math.floor((Date.now() - windowStart) / 1000);
+      if (elapsed >= WINDOW) {
+        count = 0;
+        windowStart = Date.now();
+      }
 
       if (count >= LIMIT) {
         // Serve the 429 page with proper status
@@ -38,13 +56,15 @@ export default {
           status: 429,
           headers: {
             'Content-Type': 'text/html;charset=UTF-8',
-            'Retry-After': String(WINDOW),
+            'Retry-After': String(WINDOW - elapsed),
           },
         }));
       }
 
-      // Increment counter with TTL (auto-expires after the window)
-      await env.RATE_LIMIT.put(key, String(count + 1), {
+      // Increment counter; TTL cleans up the key after the window.
+      // Window enforcement is handled by the windowStart check above.
+      // KV requires expirationTtl >= 60s, so we use WINDOW (which is 60).
+      await env.RATE_LIMIT.put(key, JSON.stringify({ count: count + 1, windowStart }), {
         expirationTtl: WINDOW,
       });
     } catch (err) {
