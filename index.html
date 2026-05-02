@@ -83,7 +83,6 @@
         .reveal-delay-2 { transition-delay: 0.2s; }
         .reveal-delay-3 { transition-delay: 0.3s; }
         .reveal-delay-4 { transition-delay: 0.4s; }
-        .reveal-delay-5 { transition-delay: 0.5s; }
         /* Smooth section transitions */
         section { transition: background-color 0.3s ease; }
         /* Hero */
@@ -156,11 +155,6 @@
         /* Back to top */
         .back-to-top { opacity: 0; pointer-events: none; transition: all 0.3s ease; }
         .back-to-top.visible { opacity: 1; pointer-events: auto; }
-        /* GitHub chart */
-        .gh-chart { width: 100%; height: auto; border-radius: 8px; }
-        .dark .gh-chart-light { display: none; }
-        .gh-chart-dark { display: none; }
-        .dark .gh-chart-dark { display: block; filter: brightness(1.1); }
         /* Page loader */
         .page-loader {
             position: fixed;
@@ -192,16 +186,12 @@
             body { background: white !important; color: #1a1a1a !important; font-size: 11pt; }
             nav, .page-loader, #back-to-top, .back-to-top, footer, .btn-primary, .btn-outline, .btn-dark { display: none !important; }
             .hero-gradient { background: white !important; padding-top: 0 !important; }
-            .hero-gradient::before { display: none !important; }
             .hero-gradient h2, .hero-gradient p, .hero-gradient span { color: #1a1a1a !important; -webkit-text-fill-color: #1a1a1a !important; }
             section { padding: 16pt 0 !important; break-inside: avoid; }
             .reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 1 !important; transform: none !important; }
             .card-hover { box-shadow: none !important; border: 1px solid #ddd !important; }
             .card-hover:hover { transform: none !important; }
             .photo-ring { display: none !important; }
-            .gh-chart-dark { display: none !important; }
-            .gh-chart-light { display: block !important; }
-            .dark .gh-chart-light { display: block !important; }
             .gradient-text, .section-heading { -webkit-text-fill-color: #1a1a1a !important; color: #1a1a1a !important; background: none !important; }
             .section-heading::after { background: #1a1a1a !important; }
             a { color: #1a1a1a !important; text-decoration: underline !important; }

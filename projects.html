@@ -7,6 +7,17 @@
     <meta name="description" content="Projects and open-source work by Owen Mettam. Explore GitHub repositories covering AI, networking, collaboration tools, and more.">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://owenmettam.com/projects">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://owenmettam.com/projects">
+    <meta property="og:title" content="Projects - Owen Mettam">
+    <meta property="og:description" content="Projects and open-source work by Owen Mettam. Explore GitHub repositories covering AI, networking, collaboration tools, and more.">
+    <meta property="og:image" content="https://owenmettam.com/headshot.jpeg">
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Projects - Owen Mettam">
+    <meta name="twitter:description" content="Projects and open-source work by Owen Mettam. Explore GitHub repositories covering AI, networking, collaboration tools, and more.">
+    <meta name="twitter:image" content="https://owenmettam.com/headshot.jpeg">
     <!-- Favicon -->
     <link rel="icon" type="image/jpeg" href="headshot.jpeg">
     <link rel="apple-touch-icon" href="headshot.jpeg">
@@ -32,10 +43,6 @@
         .reveal-scale { opacity: 0; transform: scale(0.92); transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
         .reveal-scale.visible { opacity: 1; transform: scale(1); }
         .reveal-delay-1 { transition-delay: 0.1s; }
-        .reveal-delay-2 { transition-delay: 0.2s; }
-        .reveal-delay-3 { transition-delay: 0.3s; }
-        .reveal-delay-4 { transition-delay: 0.4s; }
-        .reveal-delay-5 { transition-delay: 0.5s; }
         /* Section heading accent */
         .section-heading::after {
             content: '';
@@ -134,7 +141,9 @@
                 <div class="hidden md:flex items-center space-x-8">
                     <a href="index.html#about" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">About</a>
                     <a href="index.html#experience" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Experience</a>
+                    <a href="index.html#education" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Education</a>
                     <a href="index.html#certifications" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Certifications</a>
+                    <a href="index.html#skills" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Skills</a>
                     <a href="projects.html" class="nav-link nav-active text-indigo-600 dark:text-indigo-400 hover:text-gray-900 dark:hover:text-white">Projects</a>
                     <a href="index.html#contact" class="nav-link text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Contact</a>
                     <button id="dark-mode-toggle" class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors" aria-label="Toggle dark mode">
@@ -158,7 +167,9 @@
             <div class="px-6 py-4 space-y-3">
                 <a href="index.html#about" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">About</a>
                 <a href="index.html#experience" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Experience</a>
+                <a href="index.html#education" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Education</a>
                 <a href="index.html#certifications" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Certifications</a>
+                <a href="index.html#skills" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Skills</a>
                 <a href="projects.html" class="block text-indigo-600 dark:text-indigo-400 font-medium">Projects</a>
                 <a href="index.html#contact" class="block text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">Contact</a>
             </div>
@@ -285,96 +296,6 @@
         <i class="fas fa-arrow-up" aria-hidden="true"></i>
     </button>
 
-    <script>
-        // Page loader
-        window.addEventListener('load', () => {
-            const loader = document.getElementById('page-loader');
-            if (loader) {
-                loader.classList.add('hidden');
-                setTimeout(() => loader.remove(), 500);
-            }
-        });
-
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-
-        function closeMobileMenu() {
-            mobileMenu.classList.add('hidden');
-            mobileMenuBtn.setAttribute('aria-expanded', false);
-            mobileMenuBtn.setAttribute('aria-label', 'Open navigation menu');
-            mobileMenuBtn.focus();
-        }
-
-        function openMobileMenu() {
-            mobileMenu.classList.remove('hidden');
-            mobileMenuBtn.setAttribute('aria-expanded', true);
-            mobileMenuBtn.setAttribute('aria-label', 'Close navigation menu');
-            const firstLink = mobileMenu.querySelector('a');
-            if (firstLink) firstLink.focus();
-        }
-
-        mobileMenuBtn.addEventListener('click', () => {
-            const isHidden = mobileMenu.classList.contains('hidden');
-            isHidden ? openMobileMenu() : closeMobileMenu();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
-                closeMobileMenu();
-            }
-        });
-
-        // Dark mode
-        function initDarkMode() {
-            const toggleDesktop = document.getElementById('dark-mode-toggle');
-            const toggleMobile = document.getElementById('dark-mode-toggle-mobile');
-            const html = document.documentElement;
-
-            if (localStorage.getItem('darkMode') === 'true' ||
-                (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                html.classList.add('dark');
-                updateDarkModeIcons(true);
-            }
-
-            [toggleDesktop, toggleMobile].forEach(btn => {
-                if (btn) {
-                    btn.addEventListener('click', () => {
-                        html.classList.toggle('dark');
-                        const isDark = html.classList.contains('dark');
-                        localStorage.setItem('darkMode', isDark);
-                        updateDarkModeIcons(isDark);
-                    });
-                }
-            });
-        }
-
-        function updateDarkModeIcons(isDark) {
-            document.querySelectorAll('.icon-moon').forEach(el => el.classList.toggle('hidden', isDark));
-            document.querySelectorAll('.icon-sun').forEach(el => el.classList.toggle('hidden', !isDark));
-        }
-
-        initDarkMode();
-
-        // Scroll-triggered reveal animations
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-        document.querySelectorAll('.reveal, .reveal-scale').forEach(el => revealObserver.observe(el));
-
-        // Back to top
-        const backToTop = document.getElementById('back-to-top');
-        window.addEventListener('scroll', () => {
-            backToTop.classList.toggle('visible', window.scrollY > 500);
-        });
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>

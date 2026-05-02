@@ -115,24 +115,27 @@ document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale')
 // Combined scroll handler: active nav highlight + back-to-top button
 const backToTop = document.getElementById('back-to-top');
 
+const sections = document.querySelectorAll('section[id]');
+
 window.addEventListener('scroll', () => {
-    // Active nav highlight
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-    let current = '';
+    // Active nav highlight (only on pages with section anchors)
+    if (sections.length) {
+        const navLinks = document.querySelectorAll('.nav-link');
+        let current = '';
 
-    sections.forEach(section => {
-        if (scrollY >= section.offsetTop - 100) {
-            current = section.getAttribute('id');
-        }
-    });
+        sections.forEach(section => {
+            if (window.scrollY >= section.offsetTop - 100) {
+                current = section.getAttribute('id');
+            }
+        });
 
-    navLinks.forEach(link => {
-        link.classList.remove('nav-active', 'text-indigo-600');
-        if (link.getAttribute('href').slice(1) === current) {
-            link.classList.add('nav-active', 'text-indigo-600');
-        }
-    });
+        navLinks.forEach(link => {
+            link.classList.remove('nav-active', 'text-indigo-600');
+            if (link.getAttribute('href').slice(1) === current) {
+                link.classList.add('nav-active', 'text-indigo-600');
+            }
+        });
+    }
 
     // Back to top visibility
     backToTop.classList.toggle('visible', window.scrollY > 500);
