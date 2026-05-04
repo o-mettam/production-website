@@ -19,53 +19,58 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
     const ip = request.headers.get('cf-connecting-ip') || 'unknown';
-    const key = `rate:${ip}`;
 
     // Rate limit configuration
     // Note: Cloudflare KV requires expirationTtl >= 60 seconds
-    const LIMIT = 100;  // max requests per window
-    const WINDOW = 60;  // window in seconds (minimum 60 for KV)
+    const LIMIT = 30;           // max requests per window
+    const WINDOW = 60;          // window in seconds (minimum 60 for KV)
+    const BLOCK_DURATION = 300; // block abusive IPs for 5 minutes
 
     try {
-      // Check current request count for this IP
-      const current = await env.RATE_LIMIT.get(key);
-      let count = 0;
-      let windowStart = Date.now();
+      // Check if this IP is currently blocked from a previous violation
+      const blockKey = `block:${ip}`;
+      const blocked = await env.RATE_LIMIT.get(blockKey);
 
-      if (current) {
-        try {
-          const data = JSON.parse(current);
-          count = data.count;
-          windowStart = data.windowStart;
-        } catch {
-          // Legacy or corrupt value — reset
-        }
-      }
-
-      // If the window has expired, reset the counter
-      const elapsed = Math.floor((Date.now() - windowStart) / 1000);
-      if (elapsed >= WINDOW) {
-        count = 0;
-        windowStart = Date.now();
-      }
-
-      if (count >= LIMIT) {
-        // Serve the 429 page with proper status
+      if (blocked) {
         const page = await env.ASSETS.fetch(new URL('/429.html', url.origin));
         return applySecurityHeaders(new Response(page.body, {
           status: 429,
           headers: {
             'Content-Type': 'text/html;charset=UTF-8',
-            'Retry-After': String(WINDOW - elapsed),
+            'Retry-After': String(BLOCK_DURATION),
           },
         }));
       }
 
-      // Increment counter; TTL cleans up the key after the window.
-      // Window enforcement is handled by the windowStart check above.
-      // KV requires expirationTtl >= 60s, so we use WINDOW (which is 60).
-      await env.RATE_LIMIT.put(key, JSON.stringify({ count: count + 1, windowStart }), {
-        expirationTtl: WINDOW,
+      // Use a time-bucketed key so windows are deterministic and don't
+      // drift with each put. The bucket rolls over every WINDOW seconds.
+      const bucket = Math.floor(Date.now() / (WINDOW * 1000));
+      const rateKey = `rate:${ip}:${bucket}`;
+
+      const current = parseInt(await env.RATE_LIMIT.get(rateKey)) || 0;
+
+      if (current >= LIMIT) {
+        // Block the IP for BLOCK_DURATION to penalise sustained abuse.
+        // Even with KV eventual consistency, this block propagates
+        // quickly and persists far longer than a single window.
+        await env.RATE_LIMIT.put(blockKey, '1', {
+          expirationTtl: BLOCK_DURATION,
+        });
+
+        const page = await env.ASSETS.fetch(new URL('/429.html', url.origin));
+        return applySecurityHeaders(new Response(page.body, {
+          status: 429,
+          headers: {
+            'Content-Type': 'text/html;charset=UTF-8',
+            'Retry-After': String(BLOCK_DURATION),
+          },
+        }));
+      }
+
+      // Increment counter. TTL of 2×WINDOW ensures the key outlives the
+      // current bucket but still gets cleaned up. (120s >= 60s minimum)
+      await env.RATE_LIMIT.put(rateKey, String(current + 1), {
+        expirationTtl: WINDOW * 2,
       });
     } catch (err) {
       // If rate limiting fails, allow the request through
